@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewData["Title"] = "Registro";
+}
+
+<div class="margen-inicial formulario">
+    <h2 class="texto">Registro</h2>
+    @using (Html.BeginForm())
+    {
+        <div class="form-content">
+            <label>Nombre de usuario:</label>
+            <input type="text" name="username" class="form-control" value="@ViewData["Username"]" />
+        </div>
+        <div class="form-content">
+            <label>Email</label>
+            <input type="email" name="email" id="email" class="form-control" value="@ViewData["Email"]" />
+        </div>
+        <div class="form-content">
+            <label>Confirmar Email</label>
+            <input type="email" name="confirmarEmail" id="confirmarEmail" class="form-control" />
+            <p id="msgEmail" class="error"></p>
+        </div>
+        <div class="form-content">
+            <label>Contraseña:</label>
+            <input type="password" name="password" id="password" class="form-control" />
+        </div>
+        <div class="form-content">
+            <label>Confirmar Contraseña:</label>
+            <input type="password" name="confirmarPassword" id="confirmarPassword" class="form-control" />
+            <p id="msgPass" class="error"></p>
+        </div>
+        <div class="form-content">
+            <p class="error">@ViewData["Mensaje"]</p>
+            <button type="submit" class="site-btn" id="btnregistro">Registrarse</button>
+        </div>
+    }
+</div>
+
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#confirmarEmail").focusout(function () {
+                var email = $("#email").val();
+                var confemail = $("#confirmarEmail").val();
+                if (email != confemail) {
+                    $("#msgEmail").text("El email no coincide");
+                    $("#btnregistro").hide();
+                } else {
+                    $("#msgEmail").text("");
+                    $("#btnregistro").show();
+                }
+            });
+            $("#confirmarPassword").focusout(function () {
+                var password = $("#password").val();
+                var confpass = $("#confirmarPassword").val();
+                if (password != confpass) {
+                    $("#msgPass").text("La contraseña no coincide");
+                    $("#btnregistro").hide();
+                } else {
+                    $("#msgPass").text("");
+                    $("#btnregistro").show();
+                }
+            });
+        });
+    </script>
+}
+

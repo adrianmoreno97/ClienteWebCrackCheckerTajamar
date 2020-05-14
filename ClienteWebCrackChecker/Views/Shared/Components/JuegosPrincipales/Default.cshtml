@@ -1,0 +1,41 @@
+﻿@model List<Juego>
+@foreach (Juego j in Model)
+{
+    <a href="@Url.Action("Detalles", "Juegos", new { id = j.IdJuego })">
+        <div class="juego-principal">
+            <img src="@j.Imagen" class="imagen-principal" />
+            <div class="juego-principal-info">
+                @if (DateTime.Parse(j.FechaLanzamiento.Substring(0, 10)) > DateTime.Now)
+                {
+                    <h4 class="unreleased">
+                        @{
+                            TimeSpan elapsed = DateTime.Now.Subtract(DateTime.Parse(j.FechaLanzamiento.Substring(0, 10)));
+                            int dias = (int)elapsed.TotalDays * -1;
+                        }
+                        Sin estrenar (@dias días restantes)
+                    </h4>
+                }
+                else if (j.FechaCrack <= DateTime.Parse("1970-01-01"))
+                {
+                    <h4 class="uncracked">
+                        @{
+                            TimeSpan elapsed = DateTime.Now.Subtract(DateTime.Parse(j.FechaLanzamiento.Substring(0, 10)));
+                            int dias = (int)elapsed.TotalDays;
+                        }
+                        Sin crackear (@dias días)
+                    </h4>
+                }
+                else
+                {
+                    <h4 class="cracked">
+                        @{
+                            TimeSpan elapsed = DateTime.Now.Subtract(j.FechaCrack);
+                            int dias = (int)elapsed.TotalDays;
+                        }
+                        Crackeado (desde hace @dias dias)
+                    </h4>
+                }
+            </div>
+        </div>
+    </a>
+}

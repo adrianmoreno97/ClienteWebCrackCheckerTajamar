@@ -1,0 +1,64 @@
+﻿@model List<Usuario>
+@{
+    ViewData["Title"] = "ListadoUsuarios";
+}
+
+    <div class="margen-inicial">
+
+        <table class="table tabla-juegos">
+            <tr>
+                <th>
+
+                </th>
+                <th>
+                    Nombre de usuario
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Role
+                </th>
+                <th>
+                    Cuenta activa
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr style="text-align:center;">
+                    <td>
+                        <img class="tabla-juegos-imagen foto-perfil-administracion" src=@item.Foto />
+                    </td>
+                    <td style="font-weight:bold;">
+                        @Html.DisplayFor(modelItem => item.Username)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Role)
+                    </td>
+                    <td>
+                        @if (item.Activo == 1)
+                        {
+                            <span>Sí</span>
+                        }
+                        else
+                        {
+                            <span>No</span>
+                        }
+                    </td>
+                    <td>
+                        @Html.ActionLink("Editar", "EditarUsuario", "Administracion", new { id = item.IdUsuario }, new { @class = "site-btn" })
+                        @Html.ActionLink("Eliminar", "EliminarUsuario", "Administracion", new { id = item.IdUsuario }, new { @class = "site-btn" })
+                    </td>
+                </tr>
+            }
+        </table>
+        <p>
+            @Html.ActionLink("Volver al inicio", "Index", "Juegos", null, new { @class = "site-btn" })
+        </p>
+    </div>
+

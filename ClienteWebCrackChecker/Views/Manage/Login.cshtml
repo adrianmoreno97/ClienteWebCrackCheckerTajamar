@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="margen-inicial formulario">
+    <h2 class="texto">Inicio de sesión</h2>
+    <br />
+    @using (Html.BeginForm())
+    {
+        <div class="form-content">
+            <label>Email:</label>
+            <input type="email" name="email" class="form-control" />
+        </div>
+        <div class="form-content">
+            <label>Contraseña:</label>
+            <input type="password" name="password" class="form-control" />
+            <br />
+            <p class="error">@ViewBag.Mensaje</p>
+            <button type="submit" class="site-btn">Iniciar sesión</button>
+            <a asp-action="RecuperarPassword" asp-controller="Usuarios" class="site-btn">Restablecer contraseña</a>
+        </div>
+    }
+
+</div>
+

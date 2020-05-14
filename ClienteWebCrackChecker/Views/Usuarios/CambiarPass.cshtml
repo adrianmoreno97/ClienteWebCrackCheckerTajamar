@@ -1,0 +1,38 @@
+﻿@model Usuario
+@{
+    ViewData["Title"] = "CambiarPass";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="margen-inicial formulario">
+        <h2 class="texto">Cambiando contraseña a @Model.Username</h2>
+        <input type="hidden" name="id" value="@Model.IdUsuario" />
+
+        <div class="form-content">
+            <label>Contraseña anterior:</label>
+            <input type="password" name="passanterior" class="form-control" />
+        </div>
+
+        <div class="form-content">
+            <label>Contraseña nueva:</label>
+            <input type="password" name="passnuevo" class="form-control" />
+        </div>
+
+        <div class="form-content">
+            <label>Confirmar contraseña nueva:</label>
+            <input type="password" name="confpassnuevo" class="form-control" />
+        </div>
+
+        <div class="form-content">
+            <p class="error">@ViewData["Error"]</p>
+        </div>
+
+        <div class="form-content">
+            <button type="submit" class="site-btn">Cambiar contraseña</button>
+        </div>
+    </div>
+}
+

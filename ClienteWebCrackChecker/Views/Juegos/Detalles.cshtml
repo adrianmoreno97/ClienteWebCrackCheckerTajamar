@@ -1,0 +1,176 @@
+﻿
+@{
+    ViewData["Title"] = "Detalles";
+    String urlig = "https://crackwatch.com/goto/instant-gaming-com?game=" + Model.Slug;
+    String urlcdkeys = "https://crackwatch.com/goto/cdkeys-com?game=" + Model.Slug;
+    String urlgamivo = "https://crackwatch.com/goto/gamivo?game=" + Model.Slug;
+}
+
+<div class="margen-inicial detalles" style="margin-left: 100px; padding-bottom: 52%; margin-top:8%">
+    <div style="float:left;">
+        <img src="@Model.Imagen" class="detalles-juego-imagen" style="margin-top:25px" />
+    </div>
+    <div style="float:left;">
+        <dl class="dl-horizontal detalles-content">
+            <dt>
+                Titulo
+            </dt>
+
+            <dd>
+                @Model.Titulo
+            </dd>
+
+            <dt>
+                Fecha de lanzamiento
+            </dt>
+
+            <dd>
+                @DateTime.Parse(Model.FechaLanzamiento.Substring(0, 10)).ToShortDateString()
+            </dd>
+
+            <dt>
+                Protecciones
+            </dt>
+
+            <dd>
+                @{
+                    String protecciones = Model.Protecciones;
+                    protecciones = protecciones.Replace("[", "");
+                    protecciones = protecciones.Replace("]", "");
+                    protecciones = protecciones.Replace("\"", "");
+                    protecciones = protecciones.ToUpper();
+                }
+                <span>@protecciones</span>
+            </dd>
+
+            <dt>
+                Versiones
+            </dt>
+
+            <dd>
+                @{
+                    String versiones = Model.Versiones;
+                    versiones = versiones.Replace("[", "");
+                    versiones = versiones.Replace("]", "");
+                    versiones = versiones.Replace("\"", "");
+                    versiones = versiones.ToUpper();
+                    if (versiones == "")
+                    {
+                        versiones = "---";
+                    }
+                }
+                <span>@versiones</span>
+            </dd>
+
+            <dt>
+                Grupos
+            </dt>
+
+            <dd>
+                @{
+                    String grupos = Model.Grupos;
+                    grupos = grupos.Replace("[", "");
+                    grupos = grupos.Replace("]", "");
+                    grupos = grupos.Replace("\"", "");
+                    grupos = grupos.ToUpper();
+                    if (grupos == "")
+                    {
+                        grupos = "---";
+                    }
+                }
+                <span>@grupos</span>
+            </dd>
+
+            <dt>
+                ¿Es AAA?
+            </dt>
+
+            <dd>
+                @if (Model.EsAAA == 1)
+                {
+                    <span>Si</span>
+                }
+                else
+                {
+                    <span>No</span>
+                }
+            </dd>
+
+            <dt>
+                Página web:
+            </dt>
+
+            <dd>
+                <a href="@Model.PaginaWeb" target="_blank" class="paginado" style="font-size:initial">Enlace a Crackwatch</a>
+            </dd>
+
+            <dt>
+                Estado:
+            </dt>
+
+            <dd>
+                @if (DateTime.Parse(Model.FechaLanzamiento.Substring(0, 10)) > DateTime.Now)
+                {
+                    <span style="color:aqua">
+                        @{
+                            TimeSpan elapsed = DateTime.Now.Subtract(DateTime.Parse(Model.FechaLanzamiento.Substring(0, 10)));
+                            int dias = (int)elapsed.TotalDays * -1;
+                        }
+                        Sin estrenar (@dias días restantes)
+                    </span>
+                }
+                else if (Model.FechaCrack <= DateTime.Parse("1901-01-01"))
+                {
+                    <span style="color:red">
+                        @{
+                            TimeSpan elapsed = DateTime.Now.Subtract(DateTime.Parse(Model.FechaLanzamiento.Substring(0, 10)));
+                            int dias = (int)elapsed.TotalDays;
+                        }
+                        Sin crackear (@dias días)
+                    </span>
+                }
+                else
+                {
+                    <span style="color:lawngreen">
+                        @{
+                            TimeSpan elapsed = DateTime.Now.Subtract(Model.FechaCrack);
+                            int dias = (int)elapsed.TotalDays;
+                        }
+                        Crackeado (desde hace @dias dias)
+                    </span>
+                }
+            </dd>
+            <dt>
+                Tiendas:
+            </dt>
+            <dd>
+                <ul style="text-decoration:none">
+                    <li style="display: inline; "><a href=@urlig target="_blank" class="paginado" style="font-size:initial"><img src="~/images/tiendas/instant-gaming.svg" width="150" height="80" style="border:1px solid white; background-color:grey; padding: 3px" /></a></li>
+                    <li style="display: inline; "><a href=@urlcdkeys target="_blank" class="paginado" style="font-size:initial"><img src="~/images/tiendas/cdkeys.png" width="150" height="80" style="border:1px solid white; background-color:grey; padding: 3px" /></a></li>
+                    <li style="display: inline; "><a href=@urlgamivo target="_blank" class="paginado" style="font-size:initial"><img src="~/images/tiendas/gamivo.png" width="150" height="80" style="border:1px solid white; background-color:grey; padding: 3px" /></a></li>
+                </ul>
+            </dd>
+
+        </dl>
+        <p>
+            @if (Context.User.IsInRole("Administrador"))
+            {
+                @Html.ActionLink("Editar", "EditarJuego", "Juegos", new { id = Model.IdJuego }, new { @class = "site-btn", style = "margin-left: 50px; margin-right: 15px" });
+            }
+            @if (Context.User.Identity.IsAuthenticated)
+            {
+                @Html.ActionLink("Añadir a la lista", "AnyadirJuego", "Usuarios", new { idjuego = Model.IdJuego, iduser = int.Parse(Context.User.FindFirst("Id").Value) }, new { @class = "site-btn" })
+            }
+            @if (ViewData["Busqueda"] != null)
+            {
+                @Html.ActionLink("Volver a la lista", "Index", "Juegos", new { busqueda = ViewBag.Busqueda }, new { @class = "site-btn", style = "margin-left: 50px" })
+            }
+            else
+            {
+                @Html.ActionLink("Volver a la lista", "Index", "Juegos", new { posicion = ViewBag.Posicion }, new { @class = "site-btn", style = "margin-left: 50px" })
+            }
+        </p>
+    </div>
+</div>
+
+

@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewData["Title"] = "SinActivar";
+}
+
+<div class="margen-inicial">
+    <h3 style="color:whitesmoke;">La cuenta no se encuentra activada.</h3>
+    <h4 style="color:whitesmoke;">Para activarla, pulse @Html.ActionLink("aqui", "EnviarEmailActivacion", "Manage", new { id = int.Parse(Context.User.FindFirst("Id").Value), email = Context.User.FindFirst("Email").Value }, null)</h4>
+</div>
+

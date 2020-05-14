@@ -1,0 +1,46 @@
+﻿@model Usuario
+@{
+    ViewData["Title"] = "EditarUsuario";
+}
+
+@using (Html.BeginForm())
+{
+    <input type="hidden" name="id" value="@Model.IdUsuario" />
+    <div class="margen-inicial formulario">
+        <h4 class="texto">Editar Usuario: @Model.Username</h4>
+        <div class="form-content">
+            <label>Role:</label>
+            <select name="role" class="form-control">
+                @if (Model.Role == "Administrador")
+                {
+                    <option value="Administrador" selected>Administrador</option>
+                    <option value="Usuario">Usuario</option>
+                }
+                else
+                {
+                    <option value="Administrador">Administrador</option>
+                    <option value="Usuario" selected>Usuario</option>
+                }
+            </select>
+        </div>
+        <div class="form-content">
+            <label>Activo:</label>
+            <select name="activo" class="form-control">
+                @if (Model.Activo == 0)
+                {
+                    <option value="0" selected>No</option>
+                    <option value="1">Si</option>
+                }
+                else
+                {
+                    <option value="0">No</option>
+                    <option value="1" selected>Si</option>
+                }
+            </select>
+        </div>
+        <div class="form-content">
+            <button type="submit" class="site-btn">Guardar cambios</button>
+        </div>
+    </div>
+}
+

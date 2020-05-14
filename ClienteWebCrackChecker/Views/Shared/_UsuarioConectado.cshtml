@@ -1,0 +1,9 @@
+﻿@{
+    Usuario user = Context.User.Identity as Usuario;
+}
+<div style="position:relative; top: -15px; width:155px;">
+    <img class="foto-perfil-header" src=@Context.User.FindFirst("Foto").Value /> @Html.ActionLink(Context.User.FindFirst("Username").Value, "Perfil", "Usuarios") -
+    <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="@Url.Action("CerrarSesion", "Manage")" data-original-title="Perfil" style="display:inline; margin-left: -15px;">
+        <i class="fa fa-sign-out" aria-hidden="true"></i>
+    </a>
+</div>

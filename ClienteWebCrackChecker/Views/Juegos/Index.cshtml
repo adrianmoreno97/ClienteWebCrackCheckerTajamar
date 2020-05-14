@@ -1,0 +1,169 @@
+﻿@model List<Juego>
+@{
+    ViewData["Title"] = "Index";
+    int total = int.Parse(ViewData["Total"].ToString());
+    if(ViewData["Posicion"] != null)
+    {
+        int pos = int.Parse(ViewData["Posicion"].ToString());
+    }
+}
+
+    <div class="margen-inicial">
+        @await Component.InvokeAsync("JuegosPrincipales")
+        <form id="form-busqueda">
+            <div style="margin-bottom: 15px;">
+                <h3 style="color:whitesmoke;">Buscar juegos</h3>
+                <input type="text" name="busqueda" id="busqueda" class="form-control" value="@ViewData["Busqueda"]" />
+                <h5 class="error">@ViewData["Error"]</h5>
+            </div>
+        </form>
+        <table class="tabla-juegos table">
+            <tr>
+                <th>
+                </th>
+                <th>
+                    Titulo
+                </th>
+                <th>
+                    Estado
+                </th>
+                <th>
+                    Protecciones
+                </th>
+                <th>
+                    Fecha del crack
+                </th>
+                <th>
+                    Grupos
+                </th>
+                <th>
+                    Fecha de lanzamiento
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                int pos = item.FechaLanzamiento.IndexOf("T");
+                if (pos == -1)
+                {
+                    pos = 10;
+                }
+                <tr>
+                    <td>
+                        <img src="@item.Imagen" class="tabla-juegos-imagen" />
+                    </td>
+                    <td style="font-weight:bold;">
+                        @Html.DisplayFor(modelItem => item.Titulo)
+                    </td>
+
+                    @if (DateTime.Parse(item.FechaLanzamiento.Substring(0, pos)) > DateTime.Now)
+                    {
+                        <td class="unreleased">
+                            @{
+                                TimeSpan elapsed = DateTime.Now.Subtract(DateTime.Parse(item.FechaLanzamiento.Substring(0, pos)));
+                                int dias = (int)elapsed.TotalDays * -1;
+                            }
+                            Sin estrenar (@dias días restantes)
+                        </td>
+                    }
+                    else if (item.FechaCrack <= DateTime.Parse("1901-01-01"))
+                    {
+                        <td class="uncracked">
+                            @{
+                                TimeSpan elapsed = DateTime.Now.Subtract(DateTime.Parse(item.FechaLanzamiento.Substring(0, 10)));
+                                int dias = (int)elapsed.TotalDays;
+                            }
+                            Sin crackear (@dias días)
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="cracked">
+                            @{
+                                TimeSpan elapsed = DateTime.Now.Subtract(item.FechaCrack);
+                                int dias = (int)elapsed.TotalDays;
+                            }
+                            Crackeado (desde hace @dias dias)
+                        </td>
+                    }
+                    <td style="text-align:center;">
+                        @{
+                            String protecciones = item.Protecciones;
+                            protecciones = protecciones.Replace("[", "");
+                            protecciones = protecciones.Replace("]", "");
+                            protecciones = protecciones.Replace("\"", "");
+                            protecciones = protecciones.ToUpper();
+                        }
+                        <span>@protecciones</span>
+                    </td>
+                    <td style="text-align:center;">
+                        @if (item.FechaCrack == DateTime.Parse("1900-01-01"))
+                        {
+                            <span>---</span>
+                        }
+                        else
+                        {
+                            @item.FechaCrack.ToShortDateString()
+                        }
+                    </td>
+                    <td style="text-align:center;">
+                        @{
+                            String grupos = item.Grupos;
+                            grupos = grupos.Replace("[", "");
+                            grupos = grupos.Replace("]", "");
+                            grupos = grupos.Replace("\"", "");
+                            grupos = grupos.ToUpper();
+                            if (grupos == "")
+                            {
+                                grupos = "---";
+                            }
+                        }
+                        <span>@grupos</span>
+                    </td>
+                    <td style="text-align:center;">
+                        @DateTime.Parse(item.FechaLanzamiento.Substring(0, 10)).ToShortDateString()
+                    </td>
+                    <td>
+                        @Html.ActionLink("Detalles", "Detalles", "Juegos", new { id = item.IdJuego, busqueda = ViewData["Busqueda"], posicion = ViewBag.Posicion }, new { @class = "site-btn" })
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+
+<div>
+    <ul style="text-align:center;">
+        @if (ViewData["Busqueda"] == null)
+        {
+            <li style="display:inline">@Html.ActionLink("Inicio", "Index", "Juegos", new { posicion = 0 }, new { @class = "paginado" })</li>
+            if (ViewBag.Posicion == null || ViewBag.Posicion < 10)
+            {
+                for (int i = 0; i <= 10; i++)
+                {
+                    <li style="display:inline">@Html.ActionLink((i + 1).ToString(), "Index", "Juegos", new { posicion = i }, new { @class = "paginado" })</li>
+                }
+            }
+            else
+            {
+                if (ViewBag.Posicion >= 10 && ViewBag.Posicion <= total - 10)
+                {
+                    for (int i = ViewBag.Posicion - 5; i <= ViewBag.Posicion + 5; i++)
+                    {
+                        <li style="display:inline">@Html.ActionLink((i + 1).ToString(), "Index", "Juegos", new { posicion = i }, new { @class = "paginado" })</li>
+                    }
+                }
+                else
+                {
+                    for (int i = total - 10; i <= total; i++)
+                    {
+                        <li style="display:inline">@Html.ActionLink((i + 1).ToString(), "Index", "Juegos", new { posicion = i }, new { @class = "paginado" })</li>
+                    }
+                }
+            }
+            <li style="display:inline">@Html.ActionLink("Fin", "Index", "Juegos", new { posicion = total }, new { @class = "paginado" })</li>
+        }
+
+    </ul>
+</div>
+

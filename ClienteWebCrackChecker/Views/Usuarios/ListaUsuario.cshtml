@@ -1,0 +1,130 @@
+﻿@model List<Juego>
+@{
+    ViewData["Title"] = "ListaUsuario";
+}
+
+@if (Model.Count == 0)
+{
+    <div class="margen-inicial">
+        <h3 style="color:whitesmoke;">No tienes ningún juego añadido a la lista</h3>
+        <h4>@Html.ActionLink("Volver a tu perfil", "Perfil", "Usuarios", new { id = int.Parse(Context.User.FindFirst("Id").Value) }, new { @class = "site-btn" })</h4>
+    </div>
+}
+else
+{
+    <div class="margen-inicial">
+        <table class="tabla-juegos table">
+            <tr>
+                <th>
+                </th>
+                <th>
+                    Titulo
+                </th>
+                <th>
+                    Estado
+                </th>
+                <th>
+                    Protecciones
+                </th>
+                <th>
+                    Fecha del crack
+                </th>
+                <th>
+                    Grupos
+                </th>
+                <th>
+                    Fecha de lanzamiento
+                </th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                int pos = item.FechaLanzamiento.IndexOf("T");
+                if (pos == -1)
+                {
+                    pos = 10;
+                }
+                <tr>
+                    <td>
+                        <img src="@item.Imagen" class="tabla-juegos-imagen" />
+                    </td>
+                    <td style="font-weight:bold;">
+                        @Html.DisplayFor(modelItem => item.Titulo)
+                    </td>
+
+                    @if (DateTime.Parse(item.FechaLanzamiento.Substring(0, pos)) > DateTime.Now)
+                    {
+                        <td class="unreleased">
+                            @{
+                                TimeSpan elapsed = DateTime.Now.Subtract(DateTime.Parse(item.FechaLanzamiento.Substring(0, pos)));
+                                int dias = (int)elapsed.TotalDays * -1;
+                            }
+                            Sin estrenar (@dias días restantes)
+                        </td>
+                    }
+                    else if (item.FechaCrack <= DateTime.Parse("1901-01-01"))
+                    {
+                        <td class="uncracked">
+                            @{
+                                TimeSpan elapsed = DateTime.Now.Subtract(DateTime.Parse(item.FechaLanzamiento.Substring(0, 10)));
+                                int dias = (int)elapsed.TotalDays;
+                            }
+                            Sin crackear (@dias días)
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="cracked">
+                            @{
+                                TimeSpan elapsed = DateTime.Now.Subtract(item.FechaCrack);
+                                int dias = (int)elapsed.TotalDays;
+                            }
+                            Crackeado (desde hace @dias dias)
+                        </td>
+                    }
+                    <td style="text-align:center;">
+                        @{
+                            String protecciones = item.Protecciones;
+                            protecciones = protecciones.Replace("[", "");
+                            protecciones = protecciones.Replace("]", "");
+                            protecciones = protecciones.Replace("\"", "");
+                            protecciones = protecciones.ToUpper();
+                        }
+                        <span>@protecciones</span>
+                    </td>
+                    <td style="text-align:center;">
+                        @if (item.FechaCrack == DateTime.Parse("1900-01-01"))
+                        {
+                            <span>---</span>
+                        }
+                        else
+                        {
+                            @item.FechaCrack.ToShortDateString()
+                        }
+                    </td>
+                    <td style="text-align:center;">
+                        @{
+                            String grupos = item.Grupos;
+                            grupos = grupos.Replace("[", "");
+                            grupos = grupos.Replace("]", "");
+                            grupos = grupos.Replace("\"", "");
+                            grupos = grupos.ToUpper();
+                            if (grupos == "")
+                            {
+                                grupos = "---";
+                            }
+                        }
+                        <span>@grupos</span>
+                    </td>
+                    <td style="text-align:center;">
+                        @DateTime.Parse(item.FechaLanzamiento.Substring(0, 10)).ToShortDateString()
+                    </td>
+                    <td>
+                        @Html.ActionLink("Eliminar", "EliminarJuego", "Usuarios", new { idjuego = item.IdJuego, iduser = int.Parse(Context.User.FindFirst("Id").Value) }, new { @class = "site-btn" })
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+}
+

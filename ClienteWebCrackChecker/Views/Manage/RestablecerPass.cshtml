@@ -1,0 +1,33 @@
+﻿@model Usuario
+@{
+    ViewData["Title"] = "RestablecerPass";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="margen-inicial formulario">
+        <h2 class="texto">Restableciendo contraseña a @Model.Email</h2>
+        <input type="hidden" name="id" value="@Model.IdUsuario" />
+
+        <div class="form-content">
+            <label>Contraseña nueva:</label>
+            <input type="password" name="pass" class="form-control" />
+        </div>
+
+        <div class="form-content">
+            <label>Confirmar contraseña nueva:</label>
+            <input type="password" name="confpass" class="form-control" />
+        </div>
+
+        <div class="form-content">
+            <p class="error">@ViewData["Error"]</p>
+        </div>
+
+        <div class="form-content">
+            <button type="submit" class="site-btn">Restablecer contraseña</button>
+        </div>
+    </div>
+}
+

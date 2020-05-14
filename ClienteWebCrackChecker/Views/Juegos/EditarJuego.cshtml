@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewData["Title"] = "EditarJuego";
+    int pos = Model.FechaLanzamiento.IndexOf("T");
+    if (pos == -1)
+    {
+        pos = 10;
+    }
+}
+
+<div class="margen-inicial formulario">
+    <h4 class="texto">Editando juego: @Model.Titulo</h4>
+    <div class="form-content" style="text-align:center">
+        <img src="@Model.Imagen" />
+    </div>
+    <div class="form-content">
+        @if (DateTime.Parse(Model.FechaLanzamiento.Substring(0, pos)) > DateTime.Now)
+        {
+            <p class="unreleased">
+                @{
+                    TimeSpan elapsed = DateTime.Now.Subtract(DateTime.Parse(Model.FechaLanzamiento.Substring(0, pos)));
+                    int dias = (int)elapsed.TotalDays * -1;
+                }
+                Sin estrenar (@dias días restantes)
+            </p>
+        }
+        else if (Model.FechaCrack <= DateTime.Parse("1901-01-01"))
+        {
+            <p class="uncracked">
+                @{
+                    TimeSpan elapsed = DateTime.Now.Subtract(DateTime.Parse(Model.FechaLanzamiento.Substring(0, 10)));
+                    int dias = (int)elapsed.TotalDays;
+                }
+                Sin crackear (@dias días)
+            </p>
+        }
+        else
+        {
+            <p class="cracked">
+                @{
+                    TimeSpan elapsed = DateTime.Now.Subtract(Model.FechaCrack);
+                    int dias = (int)elapsed.TotalDays;
+                }
+                Crackeado (desde hace @dias dias)
+            </p>
+        }
+    </div>
+    @using (Html.BeginForm())
+    {
+        <input type="hidden" name="id" value="@Model.IdJuego" />
+        <div class="form-content">
+            <label>Fecha de lanzamiento:</label>
+            <input type="date" name="fechaLanz" value="@DateTime.Parse(Model.FechaLanzamiento.Substring(0, pos)).ToString("yyyy-MM-dd")" class="form-control" />
+        </div>
+
+        if (DateTime.Parse(Model.FechaLanzamiento.Substring(0, pos)) > DateTime.Now)
+        {
+            <div class="form-content">
+                <p class="texto">El juego aún no ha salido, no se puede actualizar la información del Crack</p>
+            </div>
+        }
+        else
+        {
+            <div class="form-content">
+                <label>Estado del crack:</label>
+                <select name="cracked" class="form-control">
+                    <option value="0">Sin crack</option>
+                    <option value="1">Crackeado</option>
+                </select>
+            </div>
+        }
+        <div class="form-content">
+            <button type="submit" class="site-btn">Guardar cambios</button>
+        </div>
+    }
+</div>
+
+

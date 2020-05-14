@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewData["Title"] = "Editar";
+}
+
+@using (Html.BeginForm("Editar", "Usuarios", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="margen-inicial formulario">
+        <h2 class="texto">Editando Usuario: @Model.Username</h2>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <input type="hidden" value="@Model.IdUsuario" />
+
+        <div class="form-content">
+            <label>Nombre de usuario:</label>
+            <input type="text" name="username" class="form-control" value="@Model.Username" readonly />
+        </div>
+
+        <div class="form-content">
+            <label>Correo electrónico:</label>
+            <input type="email" name="email" class="form-control" value="@Model.Email" />
+        </div>
+
+        <div class="form-content">
+            <label>Rol:</label>
+            <input type="text" name="role" class="form-control" value="@Model.Role" readonly />
+        </div>
+
+        <div class="form-content">
+            <label>Nombre:</label>
+            <input type="text" name="nombre" class="form-control" value="@Model.Nombre" />
+        </div>
+
+        <div class="form-content">
+            <label>Apellidos:</label>
+            <input type="text" name="apellidos" class="form-control" value="@Model.Apellidos" />
+        </div>
+
+        <div class="form-content">
+            <label>Fecha de nacimiento:</label>
+            <input type="date" name="fechaNac" value="@Model.FechaNacimiento.ToString("yyyy-MM-dd")" class="form-control" />
+        </div>
+        <div class="form-content">
+            <label>Telefono:</label>
+            <input type="number" name="telefono" class="form-control" value="@Model.Telefono" />
+        </div>
+
+        <div class="form-content">
+            <label>Subir foto:</label>
+            <input type="file" name="archivo" class="form-control" />
+        </div>
+        <div class="form-content">
+            <p class="error">@ViewBag.Mensaje</p>
+        </div>
+        <div class="form-content">
+            <button type="submit" class="site-btn">Guardar cambios</button>
+            @Html.ActionLink("Volver al perfil", "Perfil", "Usuarios", new { id = Model.IdUsuario }, new { @class = "site-btn" })
+        </div>
+
+    </div>
+}

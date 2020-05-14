@@ -1,0 +1,90 @@
+﻿@model Usuario
+@{
+    ViewData["Title"] = "Perfil";
+}
+
+<div class="margen-inicial" style="margin-left: 150px; padding-bottom: 45%; margin-top:8%; width:97%;" >
+    <div style="float:left;">
+        <img src=@Model.Foto class="foto-perfil-detalles" />
+    </div>
+    <div style="float:left; margin-left: 7%">
+        <dl class="dl-horizontal detalles-content">
+            <dt>
+                @Html.DisplayNameFor(model => model.Username)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Username)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Role)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Role)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Nombre)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Apellidos)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Apellidos)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.FechaNacimiento)
+            </dt>
+
+            <dd>
+                @Model.FechaNacimiento.ToShortDateString()
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Telefono)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Telefono)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Username)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Username)
+            </dd>
+            <dt>
+                Contraseña
+            </dt>
+
+            <dd>
+                @Html.ActionLink("Cambiar contraseña", "CambiarPass", "Usuarios", new { id = Model.IdUsuario }, new { @class = "btn btn-primary" })
+            </dd>
+        </dl>
+        <p style="margin-left: 40px">
+            @Html.ActionLink("Editar", "Editar", "Usuarios", new { id = Model.IdUsuario }, new { @class = "site-btn", @style = "margin-right:15px" })
+            @Html.ActionLink("Dar de baja", "DarBaja", "Usuarios", new { id = Model.IdUsuario }, new { @class = "site-btn", @style = "margin-right:15px" })
+            @Html.ActionLink("Volver a la lista", "Index", "Juegos", null, new { @class = "site-btn" })
+        </p>
+    </div>
+</div>
+
